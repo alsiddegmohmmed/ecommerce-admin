@@ -27,7 +27,7 @@ export default function Products() {
                 <tbody>
                 {products.map(product => (
                     // eslint-disable-next-line react/jsx-key
-                    <tr>
+                    <tr key={product._id}>
                         <td>{product.title}</td>
                         <td>
                             <Link href={'/products/edit/'+product._id}> 
