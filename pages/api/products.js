@@ -30,12 +30,12 @@ export default async function handle(req, res) {
     }
 
     if (method === 'POST') {
-        const { title, description, price, images } = req.body;
+        const { title, description, price, images, category } = req.body;
         if (!title || !description || !price) {
             return res.status(400).json({ message: 'Missing required fields' });
         }
         try {
-            const productDoc = await Product.create({ title, description, price ,images});
+            const productDoc = await Product.create({ title, description, price ,images, category});
             res.json(productDoc);
         } catch (error) {
             console.error('Error creating product:', error);
@@ -43,8 +43,8 @@ export default async function handle(req, res) {
         }
     }
     if (method === "PUT") {
-        const { title, description, price,images, _id } = req.body;
-       await Product.updateOne({_id}, {title:title, description:description, price:price , images:images});
+        const { title, description, price,images, category,_id, } = req.body;
+       await Product.updateOne({_id}, {title:title, description:description, price:price , images:images, category: category});
         res.json(true)
     }
 

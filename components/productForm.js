@@ -1,22 +1,29 @@
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Spinner from './spinner';
 import { ReactSortable } from 'react-sortablejs';
 
 
-export default function ProductForm({ _id, title: existingTitle, description: existingDescription, price: existingPrice, images: existingImages }) {
+export default function ProductForm({ _id, title: existingTitle, description: existingDescription, price: existingPrice, images: existingImages, category: assaignedCategory }) {
   const [title, setTitle] = useState(existingTitle || '');
   const [description, setDescription] = useState(existingDescription || '');
   const [price, setPrice] = useState(existingPrice || '');
+  const [category, setCategory] = useState(assaignedCategory || '');
   const [images, setImages] = useState(existingImages || []);
-  const [isUploading, setIsUploading] =  useState(false)
+  const [isUploading, setIsUploading] =  useState(false);
+  const [categories, setCategories] = useState([]); 
   const [error, setError] = useState(null);
   const router = useRouter(); // Call useRouter() as a function
+  useEffect(() => {
+    axios.get('/api/categories').then(result => {
+        setCategories(result.data); 
+    })
+  }, [])
 
   async function saveProduct(ev) {
     ev.preventDefault();
-    const data = { title, description, price, images };
+    const data = { title, description, price, images, category};
 
     try {
       if (_id) {
@@ -61,8 +68,19 @@ export default function ProductForm({ _id, title: existingTitle, description: ex
         type="text"
         placeholder="Product name"
         value={title}
-        onChange={ev => setTitle(ev.target.value)}
-      />
+        onChange={ev => setTitle(ev.target.value)}/>
+
+        <label>
+        Category
+        </label>
+        <select value={category} onChange={ev => setCategory(ev.target.value)}>
+            <option value="">Uncategorized</option>
+            {categories.length > 0 && categories.map(c => (
+                <option key={c._id} value={c._id}>{c.name}</option>
+            ))}
+
+        </select>
+
       <label>
         Photos
       </label>
