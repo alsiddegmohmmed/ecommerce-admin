@@ -10,14 +10,14 @@ export default async function handle(req, res) {
     }
 
     if (method === 'POST') {
-        const { name, parent } = req.body; // Adjusted
-        const categoryDoc = await Category.create({ name, parent: parent || null }); // Adjusted
+        const { name, parent, properties } = req.body; // Adjusted
+        const categoryDoc = await Category.create({ name, parent: parent || null, properties }); // Adjusted
         res.json(categoryDoc);
     }
 
     if (method === 'PUT') {
-        const { _id, name, parent } = req.body; // Adjusted
-        const categoryDoc = await Category.updateOne({ _id }, { name, parent: parent || null }); // Adjusted
+        const { _id, name, parent, properties } = req.body; // Adjusted
+        const categoryDoc = await Category.updateOne({ _id }, { name, parent: parent || null, properties }); // Adjusted
         res.json(categoryDoc);
     }
 

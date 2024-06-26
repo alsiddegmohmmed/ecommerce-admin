@@ -10,7 +10,8 @@ const CategorySchema = new Schema({
         type: mongoose.Types.ObjectId,
         ref: 'Category',
 
-    }
+    }, 
+    properties: [{type:Object}]
     
 });
 

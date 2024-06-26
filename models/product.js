@@ -15,7 +15,12 @@ const ProductSchema = new Schema({
     images: {
         type: [{type:String}] // Array of strings to store image URLs
     },
-    category: {type:mongoose.Types.ObjectId, ref:'Category'}
+    category: {
+        type:mongoose.Types.ObjectId, 
+        ref:'Category'
+    },
+    properties: {type:Object},
+
 
 });
 
