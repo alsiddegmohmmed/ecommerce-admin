@@ -1,10 +1,13 @@
 import { mongooseConnect } from "@/lib/mongoose";
 import { Product } from "@/models/product";
+import { isAdminRequest } from "./auth/[...nextauth]";
 
 export default async function handle(req, res) {
     const { method } = req;
     try {
         await mongooseConnect();
+        await isAdminRequest (req, res); 
+
     } catch (error) {
         console.error('Error connecting to the database:', error);
         return res.status(500).json({ message: 'Database connection error' });
