@@ -1,4 +1,3 @@
-// api/products.js
 import { mongooseConnect } from "@/lib/mongoose";
 import { Product } from "@/models/product";
 
@@ -31,29 +30,40 @@ export default async function handle(req, res) {
 
     if (method === 'POST') {
         const { title, description, price, images, category, properties } = req.body;
-        console.log('Received POST Data:', req.body);
-        if (!title || !description || !price) {
-            return res.status(400).json({ message: 'Missing required fields' });
+        console.log('Received POST Data:', req.body); // Log received data
+        if (!title || !price) {
+            return res.status(400).json({ message: 'Missing required fields: title or price' });
         }
         try {
-            const productDoc = await Product.create({ title, description, price ,images, category, properties});
+            const productDoc = await Product.create({ title, description, price, images, category, properties });
             res.json(productDoc);
         } catch (error) {
             console.error('Error creating product:', error);
-            res.status(500).json({ message: 'Error creating product' });
+            return res.status(500).json({ message: 'Error creating product', error: error.message });
         }
     }
-    if (method === "PUT") {
-        const { title, description, price,images, category, properties,_id, } = req.body;
-       await Product.updateOne({_id}, {title:title, description:description, price:price , images:images, category: category, properties:properties});
-        res.json(true)
+
+    if (method === 'PUT') {
+        const { title, description, price, images, category, properties, _id } = req.body;
+        console.log('Received PUT Data:', req.body); // Log received data
+        try {
+            await Product.updateOne({ _id }, { title, description, price, images, category, properties });
+            res.json(true);
+        } catch (error) {
+            console.error('Error updating product:', error);
+            return res.status(500).json({ message: 'Error updating product', error: error.message });
+        }
     }
 
-
     if (method === 'DELETE') {
-        if(req.query?.id) {
-            await Product.deleteOne({_id:req.query?.id});
-            res.json(true);
+        if (req.query?.id) {
+            try {
+                await Product.deleteOne({ _id: req.query?.id });
+                res.json(true);
+            } catch (error) {
+                console.error('Error deleting product:', error);
+                return res.status(500).json({ message: 'Error deleting product', error: error.message });
+            }
         }
     }
 }

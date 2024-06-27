@@ -17,9 +17,10 @@ const ProductSchema = new Schema({
     },
     category: {
         type:mongoose.Types.ObjectId, 
-        ref:'Category'
+        ref:'Category',
+        default: null
     },
-    properties: {type:Object},
+    properties: { type: Object }
 
 
 });
