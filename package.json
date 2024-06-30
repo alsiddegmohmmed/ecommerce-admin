@@ -10,6 +10,9 @@
   },
   "dependencies": {
     "@auth/mongodb-adapter": "^3.4.1",
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
+    "@mui/material": "^5.15.21",
     "axios": "^1.7.2",
     "cloudinary": "^2.2.0",
     "mogoose": "^0.0.1-security",
