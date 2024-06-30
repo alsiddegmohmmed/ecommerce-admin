@@ -1,18 +1,32 @@
 import Nav from "@/components/Nav";
-import { useSession, signIn } from "next-auth/react";
 
 export default function Layout({ children }) {
-  const { data: session } = useSession();
-  if (!session) {
+  // Simulate session data for testing purposes (replace with your actual session handling)
+  const session = {
+    user: {
+      name: "Admin User",
+      image: "/path/to/admin-image.jpg",
+      email: "alsiddeg.omer19990@gmail.com", // Replace with your admin email
+    },
+  };
+
+  // Check if session exists (simulating logged-in state)
+  const isLoggedIn = !!session;
+
+  if (!isLoggedIn) {
+    // Replace with your desired behavior if no session is available
     return (
       <div className="bg-blue-900 w-screen h-screen flex items-center">
         <div className="text-center w-full">
-          <button onClick={() => signIn('google')} className="bg-white p-2 px-4 rounded-lg">Login with google</button>
+          <p className="text-white text-lg">
+            You are not logged in. Please log in to access the application.
+          </p>
         </div>
       </div>
     );
   }
 
+  // Render the layout with navigation and children
   return (
     <div className="bg-blue-900 min-h-screen flex">
       <Nav />
