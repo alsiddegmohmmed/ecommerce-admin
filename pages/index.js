@@ -1,21 +1,25 @@
 import Layout from "@/components/Layout";
 import { useSession } from "next-auth/react";
-import { signIn } from "next-auth/react";
-
 
 export default function Home() {
   const { data: session } = useSession();
-  if (!session) {
+
+  // Modify the condition to check for admin access or for testing purposes
+  const isAdmin = session && session.user && session.user.email === 'alsiddeg.omer19990@gmail.com';
+
+  if (!isAdmin) {
     return (
       <Layout>
         <div className="bg-blue-900 w-screen h-screen flex items-center">
           <div className="text-center w-full">
-            <button onClick={() => signIn('google')} className="bg-white p-2 px-4 rounded-lg">Login with google</button>
+            <button onClick={() => signIn('google')} className="bg-white p-2 px-4 rounded-lg">Login with Google</button>
           </div>
         </div>
       </Layout>
     );
   }
+
+  // Render admin dashboard content
   return (
     <Layout>
       <div className="text-blue-900 flex justify-between">

@@ -14,15 +14,18 @@ const ProductSchema = new Schema({
     }, 
     images: {
         type: [{type:String}] // Array of strings to store image URLs
-    },
+    }, 
     category: {
         type:mongoose.Types.ObjectId, 
         ref:'Category',
         default: null
     },
-    properties: { type: Object }
+    properties: { type: Object },
+    
 
 
+}, {
+    timestamps: true, 
 });
 
 export const Product = models.Product || model('Product', ProductSchema);
