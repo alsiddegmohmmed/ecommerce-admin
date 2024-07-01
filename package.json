@@ -15,6 +15,7 @@
     "@mui/material": "^5.15.21",
     "axios": "^1.7.2",
     "cloudinary": "^2.2.0",
+    "dayjs": "^1.11.11",
     "mogoose": "^0.0.1-security",
     "mongodb": "^6.7.0",
     "mongoose": "^8.4.3",
