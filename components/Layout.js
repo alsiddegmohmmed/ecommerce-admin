@@ -4,8 +4,8 @@ export default function Layout({ children }) {
   // Simulate session data for testing purposes (replace with your actual session handling)
   const session = {
     user: {
-      name: "Admin User",
-      image: "/path/to/admin-image.jpg",
+      name: "Siddeg Omer",
+      image: "https://lh3.googleusercontent.com/ogw/AF2bZyhhOdiUSDOcitII29_hcoAk8HwLB4g2lcBo1kiVUxX-3HA=s64-c-mo",
       email: "alsiddeg.omer19990@gmail.com", // Replace with your admin email
     },
   };
