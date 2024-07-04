@@ -1,17 +1,20 @@
-// pages/admin/dashboard.js
+// Import necessary components and libraries
 import Layout from '@/components/Layout';
 import React, { useState, useEffect } from 'react';
-import Grid from '@mui/material/Grid';
-import CustomBox from '@/components/CustomBox';
+import { Grid, Paper, Typography, CircularProgress, IconButton } from '@mui/material';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { Notifications, Person } from '@mui/icons-material';
 import axios from 'axios';
 
-export default function Dashboard() {
+const Dashboard = () => {
+  // Simulated session data and states for orders and revenue
   const [todayOrders, setTodayOrders] = useState(0);
   const [thisWeekOrders, setThisWeekOrders] = useState(0);
   const [thisMonthOrders, setThisMonthOrders] = useState(0);
   const [todayRevenue, setTodayRevenue] = useState(0);
   const [thisWeekRevenue, setThisWeekRevenue] = useState(0);
   const [thisMonthRevenue, setThisMonthRevenue] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchData() {
@@ -31,6 +34,7 @@ export default function Dashboard() {
         setTodayRevenue(todayRevenueRes.data.revenue || 0);
         setThisWeekRevenue(thisWeekRevenueRes.data.revenue || 0);
         setThisMonthRevenue(thisMonthRevenueRes.data.revenue || 0);
+        setLoading(false);
       } catch (error) {
         console.error('Failed to fetch data:', error);
       }
@@ -42,23 +46,16 @@ export default function Dashboard() {
   const session = {
     user: {
       name: "Siddeg Omer",
-      image: "https://lh3.googleusercontent.com/ogw/AF2bZyhhOdiUSDOcitII29_hcoAk8HwLB4g2lcBo1kiVUxX-3HA=s64-c-mopg",
-      email: "alsiddeg.omer19990@gmail.com", // Replace with your admin email
+      image: "./-s6afmh.jpg",
+      email: "alsiddeg.omer19990@gmail.com",
     },
   };
 
-  // Check if session exists (simulating logged-in state)
-  const isLoggedIn = !!session;
-
-  if (!isLoggedIn) {
+  if (loading) {
     return (
       <Layout>
-        <div className="bg-blue-900 w-screen h-screen flex items-center">
-          <div className="text-center w-full">
-            <p className="text-white text-lg">
-              You are not logged in. Please log in to access the application.
-            </p>
-          </div>
+        <div className="flex justify-center items-center h-screen">
+          <CircularProgress />
         </div>
       </Layout>
     );
@@ -66,38 +63,77 @@ export default function Dashboard() {
 
   return (
     <Layout>
-      <div className="text-blue-900 flex justify-between">
-        <h2>Hello, <b>{session.user.name}</b></h2>
-        <div className="flex bg-gray-300 gap-1 text-black rounded-lg overflow-hidden">
-          <img src={session.user.image} alt="" className="w-6 h-6" />
-          <span className="px-2">{session.user.name}</span>
+      <div className="p-4">
+        <div className="flex justify-between items-center mb-4">
+          <Typography variant="h4">Hello, <b>{session.user.name}</b></Typography>
+          <div className="flex items-center">
+            <IconButton>
+              <Notifications />
+            </IconButton>
+            <div className="flex items-center bg-gray-300 p-2 rounded-lg ml-2">
+              <img src={session.user.image} alt="Profile" className="w-6 h-6 rounded-full" />
+              <Typography className="ml-2">{session.user.name}</Typography>
+            </div>
+          </div>
         </div>
-      </div>
-      <h1 className='mt-4'>Orders</h1>
-      <Grid container spacing={2}>
-        <Grid item xs={12} sm={6} md={4}>
-          <CustomBox header="Today" title={todayOrders.toString()} />
-        </Grid>
-        <Grid item xs={12} sm={6} md={4}>
-          <CustomBox header="This week" title={thisWeekOrders.toString()} />
-        </Grid>
-        <Grid item xs={12} sm={6} md={4}>
-          <CustomBox header="This Month" title={thisMonthOrders.toString()} />
-        </Grid>
-      </Grid>
 
-      <h1 className='mt-4'>Revenue</h1>
-      <Grid container spacing={2}>
-        <Grid item xs={12} sm={6} md={4}>
-          <CustomBox header="Today" title={`$${todayRevenue}`} />
+        <Grid container spacing={4}>
+          <Grid item xs={12} md={4}>
+            <Paper className="p-4">
+              <Typography variant="h6">Today's Orders</Typography>
+              <Typography variant="h4">{todayOrders}</Typography>
+            </Paper>
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <Paper className="p-4">
+              <Typography variant="h6">This Week's Orders</Typography>
+              <Typography variant="h4">{thisWeekOrders}</Typography>
+            </Paper>
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <Paper className="p-4">
+              <Typography variant="h6">This Month's Orders</Typography>
+              <Typography variant="h4">{thisMonthOrders}</Typography>
+            </Paper>
+          </Grid>
         </Grid>
-        <Grid item xs={12} sm={6} md={4}>
-          <CustomBox header="This week" title={`$${thisWeekRevenue}`} />
+
+        <Grid container spacing={4} className="mt-4">
+          <Grid item xs={12} md={4}>
+            <Paper className="p-4">
+              <Typography variant="h6">Today's Revenue</Typography>
+              <Typography variant="h4">${todayRevenue}</Typography>
+            </Paper>
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <Paper className="p-4">
+              <Typography variant="h6">This Week's Revenue</Typography>
+              <Typography variant="h4">${thisWeekRevenue}</Typography>
+            </Paper>
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <Paper className="p-4">
+              <Typography variant="h6">This Month's Revenue</Typography>
+              <Typography variant="h4">${thisMonthRevenue}</Typography>
+            </Paper>
+          </Grid>
         </Grid>
-        <Grid item xs={12} sm={6} md={4}>
-          <CustomBox header="This Month" title={`$${thisMonthRevenue}`} />
-        </Grid>
-      </Grid>
+
+        <Typography variant="h5" className="mt-8">Sales Overview</Typography>
+        <ResponsiveContainer width="100%" height={300} className="mt-4">
+          <LineChart data={[{ name: 'Jan', uv: 400, pv: 2400, amt: 2400 }, /* Add your data here */]}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="name" />
+            <YAxis />
+            <Tooltip />
+            <Legend />
+            <Line type="monotone" dataKey="pv" stroke="#8884d8" activeDot={{ r: 8 }} />
+            <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
     </Layout>
   );
-}
+};
+
+export default Dashboard;
