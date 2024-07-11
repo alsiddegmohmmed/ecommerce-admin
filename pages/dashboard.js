@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react';
 import { Grid, Paper, Typography, CircularProgress, IconButton } from '@mui/material';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { Notifications, Person } from '@mui/icons-material';
-import axios from 'axios';
 
 const Dashboard = () => {
   // Simulated session data and states for orders and revenue

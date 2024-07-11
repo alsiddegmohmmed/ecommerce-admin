@@ -17,6 +17,7 @@
     "axios": "^1.7.2",
     "cloudinary": "^2.2.0",
     "dayjs": "^1.11.11",
+    "express": "^4.19.2",
     "lodash-es": "^4.17.21",
     "mogoose": "^0.0.1-security",
     "mongodb": "^6.7.0",

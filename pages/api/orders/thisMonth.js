@@ -1,7 +1,7 @@
 // pages/api/orders/thisMonth.js
 
 import { mongooseConnect } from "@/lib/mongoose";
-import { Order } from '@/models/Order';
+import { Order } from '@/pages/Order';
 import dayjs from 'dayjs';
 
 export default async function handler(req, res) {

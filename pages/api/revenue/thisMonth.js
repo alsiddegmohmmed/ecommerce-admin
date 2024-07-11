@@ -1,7 +1,7 @@
 // pages/api/revenue/thisMonth.js
 
 import { mongooseConnect } from "@/lib/mongoose";
-import { Order } from '@/models/Order';
+import { Order } from '@/pages/Order';
 import dayjs from 'dayjs';
 
 export default async function handler(req, res) {
@@ -12,7 +12,7 @@ export default async function handler(req, res) {
   
     const orders = await Order.find({
       createdAt: { $gte: startOfMonth, $lt: endOfMonth },
-      paid: true,
+      
     });
   
     const totalRevenue = orders.reduce((acc, order) => {
