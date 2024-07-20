@@ -1,16 +1,11 @@
-// pages/admin/dashboard.js
 import Layout from '@/components/Layout';
 import React, { useState, useEffect } from 'react';
-import Grid from '@mui/material/Grid';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import Typography from '@mui/material/Typography';
-import CircularProgress from '@mui/material/CircularProgress';
-import Box from '@mui/material/Box';
-import Avatar from '@mui/material/Avatar';
+import { Grid, Paper, Typography, CircularProgress, IconButton } from '@mui/material';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { Notifications, Person } from '@mui/icons-material';
 import axios from 'axios';
 
-export default function Home() {
+const Dashboard = () => {
   const [todayOrders, setTodayOrders] = useState(0);
   const [thisWeekOrders, setThisWeekOrders] = useState(0);
   const [thisMonthOrders, setThisMonthOrders] = useState(0);
@@ -22,32 +17,18 @@ export default function Home() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const [
-          todayOrdersRes,
-          thisWeekOrdersRes,
-          thisMonthOrdersRes,
-          todayRevenueRes,
-          thisWeekRevenueRes,
-          thisMonthRevenueRes,
-        ] = await Promise.all([
-          axios.get('/api/orders/today'),
-          axios.get('/api/orders/thisWeek'),
-          axios.get('/api/orders/thisMonth'),
-          axios.get('/api/revenue/today'),
-          axios.get('/api/revenue/thisWeek'),
-          axios.get('/api/revenue/thisMonth'),
-        ]);
+        const response = await axios.get('/api/dashboard');
+        const data = response.data;
 
-        setTodayOrders(todayOrdersRes.data.count || 0);
-        setThisWeekOrders(thisWeekOrdersRes.data.count || 0);
-        setThisMonthOrders(thisMonthOrdersRes.data.count || 0);
-        setTodayRevenue(todayRevenueRes.data.revenue || 0);
-        setThisWeekRevenue(thisWeekRevenueRes.data.revenue || 0);
-        setThisMonthRevenue(thisMonthRevenueRes.data.revenue || 0);
+        setTodayOrders(data.orders.day);
+        setThisWeekOrders(data.orders.week);
+        setThisMonthOrders(data.orders.month);
+        setTodayRevenue(data.revenue.day);
+        setThisWeekRevenue(data.revenue.week);
+        setThisMonthRevenue(data.revenue.month);
+        setLoading(false);
       } catch (error) {
         console.error('Failed to fetch data:', error);
-      } finally {
-        setLoading(false);
       }
     }
 
@@ -56,147 +37,95 @@ export default function Home() {
 
   const session = {
     user: {
-      name: 'Siddeg Omer',
-      image: './-s6afmh.jpg',
-      email: 'alsiddeg.omer19990@gmail.com', // Replace with your admin email
+      name: "Siddeg Omer",
+      image: "./-s6afmh.jpg",
+      email: "alsiddeg.omer19990@gmail.com",
     },
   };
-
-  // Check if session exists (simulating logged-in state)
-  const isLoggedIn = !!session;
-
-  if (!isLoggedIn) {
-    return (
-      <Layout>
-        <Box
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          height="100vh"
-          bgcolor="background.default"
-        >
-          <Typography variant="h5" color="textPrimary">
-            You are not logged in. Please log in to access the application.
-          </Typography>
-        </Box>
-      </Layout>
-    );
-  }
 
   if (loading) {
     return (
       <Layout>
-        <Box
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          height="100vh"
-        >
+        <div className="flex justify-center items-center h-screen">
           <CircularProgress />
-        </Box>
+        </div>
       </Layout>
     );
   }
 
   return (
     <Layout>
-      <Box p={3}>
-        <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
-          <Typography variant="h4" color="textPrimary">
-            Hello, <b>{session.user.name}</b>
-          </Typography>
-          <Box display="flex" alignItems="center"   p={1} borderRadius="16px">
-            <Avatar src={session.user.image} alt={session.user.name} />
-            <Typography variant="" color="textPrimary" ml={2}>
-              {session.user.name}
-            </Typography>
-          </Box>
-        </Box>
+      <div className="p-4">
+        <div className="flex justify-between items-center mb-4">
+          <Typography variant="h4">Hello, <b>{session.user.name}</b></Typography>
+          <div className="flex items-center">
+            <IconButton>
+              <Notifications />
+            </IconButton>
+            <div className="flex items-center bg-gray-300 p-2 rounded-lg ml-2">
+              <img src={session.user.image} alt="Profile" className="w-6 h-6 rounded-full" />
+              <Typography className="ml-2">{session.user.name}</Typography>
+            </div>
+          </div>
+        </div>
 
-        <Typography variant="h5" color="textPrimary" mb={2}>
-          Orders
-        </Typography>
-        <Grid container spacing={3}>
-          <Grid item xs={12} sm={6} md={4}>
-            <Card>
-              <CardContent>
-                <Typography color="textSecondary" gutterBottom>
-                  Today
-                </Typography>
-                <Typography variant="h5">
-                  {todayOrders}
-                </Typography>
-              </CardContent>
-            </Card>
+        <Grid container spacing={4}>
+          <Grid item xs={12} md={4}>
+            <Paper className="p-4">
+              <Typography variant="h6">Today's Orders</Typography>
+              <Typography variant="h4">{todayOrders}</Typography>
+            </Paper>
           </Grid>
-          <Grid item xs={12} sm={6} md={4}>
-            <Card>
-              <CardContent>
-                <Typography color="textSecondary" gutterBottom>
-                  This week
-                </Typography>
-                <Typography variant="h5">
-                  {thisWeekOrders}
-                </Typography>
-              </CardContent>
-            </Card>
+          <Grid item xs={12} md={4}>
+            <Paper className="p-4">
+              <Typography variant="h6">This Week's Orders</Typography>
+              <Typography variant="h4">{thisWeekOrders}</Typography>
+            </Paper>
           </Grid>
-          <Grid item xs={12} sm={6} md={4}>
-            <Card>
-              <CardContent>
-                <Typography color="textSecondary" gutterBottom>
-                  This Month
-                </Typography>
-                <Typography variant="h5">
-                  {thisMonthOrders}
-                </Typography>
-              </CardContent>
-            </Card>
+          <Grid item xs={12} md={4}>
+            <Paper className="p-4">
+              <Typography variant="h6">This Month's Orders</Typography>
+              <Typography variant="h4">{thisMonthOrders}</Typography>
+            </Paper>
           </Grid>
         </Grid>
 
-        <Typography variant="h5" color="textPrimary" mt={4} mb={2}>
-          Revenue
-        </Typography>
-        <Grid container spacing={3}>
-          <Grid item xs={12} sm={6} md={4}>
-            <Card>
-              <CardContent>
-                <Typography color="textSecondary" gutterBottom>
-                  Today
-                </Typography>
-                <Typography variant="h5">
-                  ${todayRevenue}
-                </Typography>
-              </CardContent>
-            </Card>
+        <Grid container spacing={4} className="mt-4">
+          <Grid item xs={12} md={4}>
+            <Paper className="p-4">
+              <Typography variant="h6">Today's Revenue</Typography>
+              <Typography variant="h4">${todayRevenue}</Typography>
+            </Paper>
           </Grid>
-          <Grid item xs={12} sm={6} md={4}>
-            <Card>
-              <CardContent>
-                <Typography color="textSecondary" gutterBottom>
-                  This week
-                </Typography>
-                <Typography variant="h5">
-                  ${thisWeekRevenue}
-                </Typography>
-              </CardContent>
-            </Card>
+          <Grid item xs={12} md={4}>
+            <Paper className="p-4">
+              <Typography variant="h6">This Week's Revenue</Typography>
+              <Typography variant="h4">${thisWeekRevenue}</Typography>
+            </Paper>
           </Grid>
-          <Grid item xs={12} sm={6} md={4}>
-            <Card>
-              <CardContent>
-                <Typography color="textSecondary" gutterBottom>
-                  This Month
-                </Typography>
-                <Typography variant="h5">
-                  ${thisMonthRevenue}
-                </Typography>
-              </CardContent>
-            </Card>
+          <Grid item xs={12} md={4}>
+            <Paper className="p-4">
+              <Typography variant="h6">This Month's Revenue</Typography>
+              <Typography variant="h4">${thisMonthRevenue}</Typography>
+            </Paper>
           </Grid>
         </Grid>
-      </Box>
+
+        <Typography variant="h5" className="mt-8">Sales Overview</Typography>
+        <ResponsiveContainer width="100%" height={300} className="mt-4">
+          <LineChart data={[{ name: 'Jan', uv: 400, pv: 2400, amt: 2400 }, /* Add your data here */]}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="name" />
+            <YAxis />
+            <Tooltip />
+            <Legend />
+            <Line type="monotone" dataKey="pv" stroke="#8884d8" activeDot={{ r: 8 }} />
+            <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
     </Layout>
   );
-}
+};
+
+export default Dashboard;
